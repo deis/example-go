@@ -13,7 +13,7 @@ If you do not yet have a controller or a Deis formation, please review the [Deis
 
 * Install [RubyGems](http://rubygems.org/pages/download) to get the `gem` command on your workstation
 * Install [Foreman](http://ddollar.github.com/foreman/) with `gem install foreman`
-* Install [Go](https://code.google.com/p/go/downloads/list)
+* Install [Go](https://code.google.com/p/go/downloads/list). Use `brew install go` for Mac OS X
 
 ## Clone your Appication 
 
@@ -32,7 +32,7 @@ To use a Go application with Deis, you will need to conform to 3 basic requireme
 
 If you're deploying the example application, it already conforms to these requirements.
 
-#### 1. Manage dependencies via your `Go` source code
+#### 1. Manage dependencies via your Go source code
 
 [Go](http://golang.org/) manages via import statements in your source code which can be pointed at [GitHub](http://github.com), [BitBucket](https://bitbucket.org/), or [Google Code](https://code.google.com/) repositories. E.g.
 
@@ -49,13 +49,16 @@ Deis relies on a [Foreman](http://ddollar.github.com/foreman/) `Procfile` that l
 This tells Deis to run `web` workers using the command `example-go`. You can test this locally by running `foreman start`.
 
 	$ foreman start
-	DOES NOT WORK LOCALLY.
+	13:41:38 web.1  | started with pid 2466
+	13:41:38 web.1  | listening on 5000...
 	
 You should now be able to access your application locally at <http://localhost:5000>.
 
+If you are having issues with Foreman, please refer to [Mark McGranaghan's](http://mmcgrana.github.io/2012/09/getting-started-with-go-on-heroku.html) excellent tutorial on getting Go set up locally.
+
 #### 3. Use Environment Variables to manage configuration
 
-Deis uses environment variables to manage your application's configuration. For example, your application listener must use the value of the `PORT` environment variable. The following code snippet demonstrates how this can work inside your application:
+Deis uses environment variables to manage your ¨application's configuration. For example, your application listener must use the value of the `PORT` environment variable. The following code snippet demonstrates how this can work inside your application:
 
     port := os.Getenv("PORT")
 
