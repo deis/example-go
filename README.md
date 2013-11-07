@@ -7,7 +7,7 @@ This guide will walk you through deploying a Go application on Deis.
 * A [User Account](http://docs.deis.io/en/latest/client/register/) on a [Deis Controller](http://docs.deis.io/en/latest/terms/controller/).
 * A [Deis Formation](http://docs.deis.io/en/latest/gettingstarted/concepts/#formations) that is ready to host applications
 
-If you do not yet have a controller or a Deis formation, please review the [Deis installation](http://docs.deis.io/en/latest/gettingstarted/installation/) instructions.
+If you do not yet have a controller or a Deis formation, please review the [Deis installation](http://docs.deis.io/en/latest/installation/) instructions.
 
 ## Setup your workstation
 
@@ -17,9 +17,9 @@ If you do not yet have a controller or a Deis formation, please review the [Deis
 
 ## Clone your Appication 
 
-If you want to use an existing application, no problem.  You can also use the Deis sample application located at <https://github.com/bengrunfeld/example-go>.  Clone the example application to your local workstation:
+If you want to use an existing application, no problem.  You can also use the Deis sample application located at <https://github.com/opdemand/example-go>.  Clone the example application to your local workstation:
 
-    $ git clone https://github.com/bengrunfeld/example-go.git
+    $ git clone https://github.com/opdemand/example-go.git
     $ cd example-go
 
 ## Prepare your Application
