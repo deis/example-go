@@ -2,28 +2,38 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 )
 
-// Start an HTTP server listening on $PORT which dispatches to the
-// powered_by() function.
+// Log the HTTP request
+func logHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+}
+
+// Write a "Powered by $POWERED_BY" response using the environment variable.
+func poweredByHandler(w http.ResponseWriter, r *http.Request) {
+	poweredBy := os.Getenv("POWERED_BY")
+	if poweredBy == "" {
+		poweredBy = "Deis"
+	}
+	// Print the string to the ResponseWriter
+	fmt.Fprintf(w, "Powered by %v\n", poweredBy)
+}
+
+func rootHandler(w http.ResponseWriter, r *http.Request) {
+	logHandler(w, r)
+	poweredByHandler(w, r)
+}
+
+// Start an HTTP server which dispatches handlers based on URL
 func main() {
-	http.HandleFunc("/", powered_by)
-	port := os.Getenv("PORT")
+	http.HandleFunc("/", rootHandler)
+	port := "8080"
 	fmt.Printf("listening on %v...\n", port)
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		panic(err)
 	}
-}
-
-// Return a "Powered by $POWERED_BY" message using the environment variable.
-func powered_by(res http.ResponseWriter, req *http.Request) {
-	powered_by := os.Getenv("POWERED_BY")
-	if powered_by == "" {
-		powered_by = "Deis"
-	}
-	// Print the string to the ResponseWriter
-	fmt.Fprintf(res, "Powered by %v\n", powered_by)
 }
