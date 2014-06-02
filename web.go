@@ -2,24 +2,18 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 )
 
-// Start an HTTP server listening on $PORT which dispatches to the
-// poweredBy() function.
-func main() {
-	http.HandleFunc("/", poweredBy)
-	port := os.Getenv("PORT")
-	fmt.Printf("listening on %v...\n", port)
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		panic(err)
-	}
+// Log the HTTP request
+func logHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
 }
 
-// Return a "Powered by $POWERED_BY" message using the environment variable.
-func poweredBy(res http.ResponseWriter, req *http.Request) {
+// Write a "Powered by $POWERED_BY" response using the environment variable.
+func poweredByHandler(w http.ResponseWriter, r *http.Request) {
 	release := os.Getenv("DEIS_RELEASE")
 	if release == "" {
 		release = "<unknown>"
@@ -30,5 +24,21 @@ func poweredBy(res http.ResponseWriter, req *http.Request) {
 	}
 	// Print the string to the ResponseWriter
 	hostname, _ := os.Hostname()
-	fmt.Fprintf(res, "Powered by %v\nRelease %v on %v\n", powered, release, hostname)
+	fmt.Fprintf(w, "Powered by %v\nRelease %v on %v\n", powered, release, hostname)
+}
+
+func rootHandler(w http.ResponseWriter, r *http.Request) {
+	logHandler(w, r)
+	poweredByHandler(w, r)
+}
+
+// Start an HTTP server which dispatches handlers based on URL
+func main() {
+	http.HandleFunc("/", rootHandler)
+	port := os.Getenv("PORT")
+	fmt.Printf("listening on %v...\n", port)
+	err := http.ListenAndServe(":"+port, nil)
+	if err != nil {
+		panic(err)
+	}
 }
