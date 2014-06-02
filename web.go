@@ -7,12 +7,18 @@ import (
 	"os"
 )
 
-// Log the HTTP request
-func logHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+// Start an HTTP server listening on $PORT which dispatches to a rootHandler.
+func main() {
+	http.HandleFunc("/", rootHandler)
+	port := os.Getenv("PORT")
+	log.Printf("listening on %v...\n", port)
+	err := http.ListenAndServe(":"+port, nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
-// Write a "Powered by $POWERED_BY" response using the environment variable.
+// Return a "Powered by $POWERED_BY" message using the environment variable.
 func poweredByHandler(w http.ResponseWriter, r *http.Request) {
 	release := os.Getenv("DEIS_RELEASE")
 	if release == "" {
@@ -27,18 +33,12 @@ func poweredByHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Powered by %v\nRelease %v on %v\n", powered, release, hostname)
 }
 
+// Log the HTTP request
+func logHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+}
+
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	logHandler(w, r)
 	poweredByHandler(w, r)
-}
-
-// Start an HTTP server which dispatches handlers based on URL
-func main() {
-	http.HandleFunc("/", rootHandler)
-	port := os.Getenv("PORT")
-	fmt.Printf("listening on %v...\n", port)
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		panic(err)
-	}
 }
