@@ -31,7 +31,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", rootHandler)
 	port := "8080"
-	fmt.Printf("listening on %v...\n", port)
+	log.Printf("server is listening on %v...\n", port)
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		panic(err)
