@@ -30,7 +30,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 // Start an HTTP server which dispatches handlers based on URL
 func main() {
 	http.HandleFunc("/", rootHandler)
-	port := "8080"
+	port := os.Getenv("PORT")
 	log.Printf("server is listening on %v...\n", port)
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
