@@ -55,7 +55,14 @@ remote:
 To ssh://git@local.deisapp.com:2222/rising-yearbook.git
  * [new branch]      master -> master
 $ curl http://rising-yearbook.local.deisapp.com
-Powered by Deis
+Release v3 Powered by Deis on c6f9ffdeda29
+$ deis scale web=4
+$ curl http://rising-yearbook.local.deisapp.com
+Release v3 Powered by Deis on c6f9ffdeda29
+$ curl http://rising-yearbook.local.deisapp.com
+Release v3 Powered by Deis on f1c20002e957
+$ curl http://rising-yearbook.local.deisapp.com
+Release v3 Powered by Deis on 58dd1772b8ef
 ```
 
 ## Additional Resources
