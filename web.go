@@ -29,5 +29,6 @@ func powered_by(res http.ResponseWriter, req *http.Request) {
 		powered_by = "Deis"
 	}
 	// Print the string to the ResponseWriter
-	fmt.Fprintf(res, "Release %v Powered by %v\n", deis_release, powered_by)
+	hostname, _ := os.Hostname()
+	fmt.Fprintf(res, "Release %v Powered by %v on %v\n", deis_release, powered_by, hostname)
 }
