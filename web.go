@@ -20,10 +20,14 @@ func main() {
 
 // Return a "Powered by $POWERED_BY" message using the environment variable.
 func powered_by(res http.ResponseWriter, req *http.Request) {
+	deis_release := os.Getenv("DEIS_RELEASE")
+	if deis_release == "" {
+		deis_release = "<unknown>"
+	}
 	powered_by := os.Getenv("POWERED_BY")
 	if powered_by == "" {
 		powered_by = "Deis"
 	}
 	// Print the string to the ResponseWriter
-	fmt.Fprintf(res, "Powered by %v\n", powered_by)
+	fmt.Fprintf(res, "Release %v Powered by %v\n", deis_release, powered_by)
 }
