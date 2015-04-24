@@ -6,56 +6,79 @@ This guide will walk you through deploying a Go application on Deis.
 
 ```
 $ deis create
-Creating application... done, created rising-yearbook
+Creating application... done, created luxury-waxworks
 Git remote deis added
 $ git push deis master
-Counting objects: 17, done.
-Delta compression using up to 8 threads.
-Compressing objects: 100% (9/9), done.
-Writing objects: 100% (17/17), 8.20 KiB | 0 bytes/s, done.
-Total 17 (delta 5), reused 17 (delta 5)
+Counting objects: 49, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (44/44), done.
+Writing objects: 100% (49/49), 12.60 KiB | 0 bytes/s, done.
+Total 49 (delta 18), reused 0 (delta 0)
 -----> Go app detected
------> Installing go1.2.1... done
-
-       Tired of waiting for bzr and hg?
-       Try github.com/kr/godep for faster deploys.
-
-       Installing Virtualenv... done
-       Installing Mercurial... done
-       Installing Bazaar... done
------> Running: go get -tags heroku ./...
+-----> Installing go1.4.2... done
+-----> Running: godep go install -tags heroku ./...
 -----> Discovering process types
        Procfile declares types -> web
 -----> Compiled slug size is 1.7M
-remote: -----> Building Docker image
-remote: Uploading context 1.803 MB
-remote: Uploading context
-remote: Step 0 : FROM deis/slugrunner
-remote:  ---> 5567a808891d
-remote: Step 1 : RUN mkdir -p /app
-remote:  ---> Using cache
-remote:  ---> 4096b5c0b838
-remote: Step 2 : ADD slug.tgz /app
-remote:  ---> 84cf8072cc65
-remote: Removing intermediate container 6f0a2985332c
-remote: Step 3 : ENTRYPOINT ["/runner/init"]
-remote:  ---> Running in cf364904c7df
-remote:  ---> b0685acc120c
-remote: Removing intermediate container cf364904c7df
-remote: Successfully built b0685acc120c
-remote: -----> Pushing image to private registry
-remote:
-remote:        Launching... done, v2
-remote:
-remote: -----> rising-yearbook deployed to Deis
-remote:        http://rising-yearbook.local.deisapp.com
-remote:
-remote:        To learn more, use `deis help` or visit http://deis.io
-remote:
-To ssh://git@local.deisapp.com:2222/rising-yearbook.git
+
+-----> Building Docker image
+remote: Sending build context to Docker daemon 1.723 MB
+remote: build context to Docker daemon
+Step 0 : FROM deis/slugrunner
+ ---> 553ece96de1d
+Step 1 : RUN mkdir -p /app
+ ---> Running in 79a14e4fa092
+ ---> dacb2ee0e3f3
+Removing intermediate container 79a14e4fa092
+Step 2 : WORKDIR /app
+ ---> Running in c5dcb81816d8
+ ---> c19b88f2cff7
+Removing intermediate container c5dcb81816d8
+Step 3 : ENTRYPOINT /runner/init
+ ---> Running in 2badb1515dfc
+ ---> d2bf6069fa3a
+Removing intermediate container 2badb1515dfc
+Step 4 : ADD slug.tgz /app
+ ---> 774507a8209f
+Removing intermediate container 17cc7ac67a0c
+Step 5 : ENV GIT_SHA 3800239fbd11c2ac79e22c1db82aeff0d631dc2b
+ ---> Running in d4029c60d514
+ ---> 269bf440d703
+Removing intermediate container d4029c60d514
+Successfully built 269bf440d703
+-----> Pushing image to private registry
+
+-----> Launching...
+       done, luxury-waxworks:v2 deployed to Deis
+
+       http://luxury-waxworks.local3.deisapp.com
+
+       To learn more, use `deis help` or visit http://deis.io
+
+To ssh://git@deis.local3.deisapp.com:2222/luxury-waxworks.git
  * [new branch]      master -> master
-$ curl http://rising-yearbook.local.deisapp.com
+$ curl http://luxury-waxworks.local3.deisapp.com
 Powered by Deis
+Release v2 on 2ce9ed10d21d
+$ deis scale web=3
+Scaling processes... but first, coffee!
+done in 15s
+=== luxury-waxworks Processes
+
+--- web:
+web.1 up (v2)
+web.2 up (v2)
+web.3 up (v2)
+
+$ curl http://luxury-waxworks.local3.deisapp.com
+Powered by Deis
+Release v2 on 2ce9ed10d21d
+$ curl http://luxury-waxworks.local3.deisapp.com
+Powered by Deis
+Release v2 on 3a1234b1b2b2
+$ curl http://luxury-waxworks.local3.deisapp.com
+Powered by Deis
+Release v2 on 47ebe13e1c09
 ```
 
 ## Additional Resources

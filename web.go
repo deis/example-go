@@ -7,9 +7,9 @@ import (
 )
 
 // Start an HTTP server listening on $PORT which dispatches to the
-// powered_by() function.
+// poweredBy() function.
 func main() {
-	http.HandleFunc("/", powered_by)
+	http.HandleFunc("/", poweredBy)
 	port := os.Getenv("PORT")
 	fmt.Printf("listening on %v...\n", port)
 	err := http.ListenAndServe(":"+port, nil)
@@ -19,11 +19,16 @@ func main() {
 }
 
 // Return a "Powered by $POWERED_BY" message using the environment variable.
-func powered_by(res http.ResponseWriter, req *http.Request) {
-	powered_by := os.Getenv("POWERED_BY")
-	if powered_by == "" {
-		powered_by = "Deis"
+func poweredBy(res http.ResponseWriter, req *http.Request) {
+	release := os.Getenv("DEIS_RELEASE")
+	if release == "" {
+		release = "<unknown>"
+	}
+	powered := os.Getenv("POWERED_BY")
+	if powered == "" {
+		powered = "Deis"
 	}
 	// Print the string to the ResponseWriter
-	fmt.Fprintf(res, "Powered by %v\n", powered_by)
+	hostname, _ := os.Hostname()
+	fmt.Fprintf(res, "Powered by %v\nRelease %v on %v\n", powered, release, hostname)
 }
