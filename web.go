@@ -7,9 +7,10 @@ import (
 	"os"
 )
 
-// Start an HTTP server listening on $PORT which dispatches to a rootHandler.
+// main starts an HTTP server listening on $PORT which dispatches to request handlers.
 func main() {
-	http.HandleFunc("/", rootHandler)
+	// wrap the poweredByHandler with logging middleware
+	http.Handle("/", logRequestMiddleware(http.HandlerFunc(poweredByHandler)))
 	port := os.Getenv("PORT")
 	log.Printf("listening on %v...\n", port)
 	err := http.ListenAndServe(":"+port, nil)
@@ -18,7 +19,7 @@ func main() {
 	}
 }
 
-// Return a "Powered by $POWERED_BY" message using the environment variable.
+// poweredByHandler writes "Powered by $POWERED_BY" to the response.
 func poweredByHandler(w http.ResponseWriter, r *http.Request) {
 	release := os.Getenv("DEIS_RELEASE")
 	if release == "" {
@@ -28,17 +29,16 @@ func poweredByHandler(w http.ResponseWriter, r *http.Request) {
 	if powered == "" {
 		powered = "Deis"
 	}
-	// Print the string to the ResponseWriter
+	// print the string to the ResponseWriter
 	hostname, _ := os.Hostname()
 	fmt.Fprintf(w, "Powered by %v\nRelease %v on %v\n", powered, release, hostname)
 }
 
-// Log the HTTP request
-func logHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
-}
-
-func rootHandler(w http.ResponseWriter, r *http.Request) {
-	logHandler(w, r)
-	poweredByHandler(w, r)
+// logRequestMiddleware writes out HTTP request information before passing to the next handler.
+func logRequestMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+		// pass the request to the next handler
+		next.ServeHTTP(w, r)
+	})
 }
