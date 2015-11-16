@@ -37,7 +37,11 @@ func poweredByHandler(w http.ResponseWriter, r *http.Request) {
 // logRequestMiddleware writes out HTTP request information before passing to the next handler.
 func logRequestMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+		remote := r.RemoteAddr
+		if forwardedFor := r.Header.Get("X-Forwarded-For"); forwardedFor != "" {
+			remote = forwardedFor
+		}
+		log.Printf("%s %s %s", remote, r.Method, r.URL)
 		// pass the request to the next handler
 		next.ServeHTTP(w, r)
 	})
