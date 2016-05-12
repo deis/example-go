@@ -21,7 +21,7 @@ func main() {
 
 // poweredByHandler writes "Powered by $POWERED_BY" to the response.
 func poweredByHandler(w http.ResponseWriter, r *http.Request) {
-	release := os.Getenv("DEIS_RELEASE")
+	release := os.Getenv("WORKFLOW_RELEASE")
 	if release == "" {
 		release = "<unknown>"
 	}
