@@ -9,6 +9,7 @@ import (
 
 // main starts an HTTP server listening on $PORT which dispatches to request handlers.
 func main() {
+	http.Handle("/healthz", http.HandlerFunc(healthcheckHandler))
 	// wrap the poweredByHandler with logging middleware
 	http.Handle("/", logRequestMiddleware(http.HandlerFunc(poweredByHandler)))
 	port := os.Getenv("PORT")
@@ -32,6 +33,12 @@ func poweredByHandler(w http.ResponseWriter, r *http.Request) {
 	// print the string to the ResponseWriter
 	hostname, _ := os.Hostname()
 	fmt.Fprintf(w, "Powered by %v\nRelease %v on %v\n", powered, release, hostname)
+}
+
+// healthcheckHandler returns 200 for kubernetes healthchecks.
+func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte{})
 }
 
 // logRequestMiddleware writes out HTTP request information before passing to the next handler.
