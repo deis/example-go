@@ -9,8 +9,7 @@ $ git clone https://github.com/deis/example-go.git
 $ cd example-go
 $ deis create
 Creating Application... done, created allied-question
-Git remote deis added
-remote available at ssh://git@deis-builder.deis.rocks:2222/allied-question.git
+Git remote deis added for app allied-question
 $ git push deis master
 Counting objects: 89, done.
 Delta compression using up to 4 threads.
@@ -20,15 +19,15 @@ Total 89 (delta 37), reused 46 (delta 17)
 Starting build... but first, coffee!
 -----> Go app detected
 -----> Checking Godeps/Godeps.json file.
------> Installing go1.6.2... done
+-----> Installing go1.7... done
 -----> Running: go install -v -tags heroku .
        github.com/deis/example-go
 -----> Discovering process types
        Procfile declares types -> web
------> Compiled slug size is 2.2M
+-----> Compiled slug size is 1.9M
 Build complete.
 Launching App...
-Done, allied-question:v2 deployed to Deis
+Done, allied-question:v2 deployed to Workflow
 
 Use 'deis open' to view this application in your browser
 
