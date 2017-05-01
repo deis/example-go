@@ -40,6 +40,10 @@ Powered by Deis
 Release v2 on allied-question-v2-web-wudcx
 ```
 
+### Launch
+
+Run `deis ps:scale cmd=0 web=1` to scale your service up to one node before opening.
+
 ## Additional Resources
 
 * [GitHub Project](https://github.com/deis/workflow)
